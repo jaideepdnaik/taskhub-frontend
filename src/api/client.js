@@ -3,7 +3,9 @@ import { tokenStorage } from '../features/auth/tokenStorage'
 
 const baseURL = import.meta.env.VITE_API_URL ?? '/api'
 
-export const api = axios.create({ baseURL })
+// Arrays are sent as repeated params (status=a&status=b), which is what
+// django-filter expects, not axios's default status[]=a.
+export const api = axios.create({ baseURL, paramsSerializer: { indexes: null } })
 
 // The current org, mirrored here from Redux (see app/listeners.js) so this
 // module doesn't import the store, which would create an import cycle.
