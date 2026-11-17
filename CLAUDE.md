@@ -25,7 +25,7 @@ React Router v7 · Axios · @dnd-kit (Kanban) · oxlint
   - `queries.js` for React Query hooks and query keys
   - `*Slice.js` only if the feature has client state
   - components used only by that feature
-- `src/components/`: shared, reusable UI (`FormField`, `Modal`, `ConfirmDialog`, `Pagination`, `ErrorState`, `Avatar`)
+- `src/components/`: shared, reusable UI (`FormField`, `Modal`, `ConfirmDialog`, `Pagination`, `ErrorState`, `Avatar`, `StatTile`, `BarBreakdown`, `CopyField`)
 - `src/hooks/`: shared hooks (`useDebouncedValue`, `useDismiss`)
 - `src/utils/`: plain helpers (`time.js` for dates)
 - `src/api/errors.js`: `parseApiError(error)` turns a DRF error into `{fields, message}` for forms
@@ -47,17 +47,18 @@ React Router v7 · Axios · @dnd-kit (Kanban) · oxlint
 - Include `orgId` in every query key, so that switching orgs never shows another org's cached data. Clear the cache when the user switches org or logs out.
 
 ## Routes
-- `/login`, `/register` and `/invite/:token` are public.
+- `/login` and `/register` are public. They return to the original URL (including its query) after signing in.
+- `/invitations/accept?token=...` is the backend's invite link (`accept_url`). It needs an account, so signed-out users log in or register first and come back. `/invite/:token` redirects to it.
 - `/` redirects to the user's last-used or first org.
 - `/orgs/new`: create an organization (where new users with no orgs land)
-- `/org/:orgId`: org home (placeholder for the step 7 dashboard). `OrgLayout` checks membership before rendering children.
+- `/org/:orgId`: dashboard (stat tiles, overdue tasks, tasks by status/priority, recent activity). `OrgLayout` checks membership before rendering children.
 - `/org/:orgId/projects`: the projects list (`?q=&archived=1&page=`)
 - `/org/:orgId/projects/:projectId`: project page (details, members, archive/delete)
 - `/org/:orgId/projects/:projectId/board`: the Kanban board; `?view=list` shows the filtered list. Task details open in a drawer (`?task=<id>`).
-- `/org/:orgId/my-tasks`, `/org/:orgId/notifications` and `/org/:orgId/settings` (members and roles)
+- `/org/:orgId/my-tasks` and `/org/:orgId/notifications`
+- `/org/:orgId/settings?tab=members|invitations|general`: members and roles, invitations (owner/admin), rename/leave/delete
 - Protected routes go through `ProtectedRoute`. Hide or disable actions the user's role can't perform, such as edit buttons for viewers.
   Use `usePermissions()` (`isAdmin`, `canEdit`, `isOwner`), which mirrors the backend's role matrix. Archived projects are read-only.
-- Unbuilt sections render `PlaceholderPage` so the sidebar works; replace them as each step lands.
 
 ## Conventions
 - Function components and hooks only. One component per file, named in PascalCase.
@@ -73,7 +74,7 @@ React Router v7 · Axios · @dnd-kit (Kanban) · oxlint
 - Before building a screen, check the endpoint's shape in `/api/docs/` or in the `schema.yml` provided. Don't guess field names.
 - If an endpoint is missing or the wrong shape, say so rather than faking it with mock data.
 - The backend runs at http://127.0.0.1:8000. Its OpenAPI schema is at `/api/schema/`, and the source is in `../taskhub-backend` (`apps/*/serializers.py`, `views.py`).
-- **Open mismatch:** the backend's invitation `accept_url` is `/invitations/accept?token=...`, but the route here is `/invite/:token`. Settle this before building invites (step 7).
+- Backend signals have side effects the cache must follow: removing someone from an org or a project also drops them from its projects and **unassigns their tasks**, so invalidate task data too.
 
 ## Workflow
 - Work in small steps, one feature or screen at a time.
@@ -89,5 +90,5 @@ React Router v7 · Axios · @dnd-kit (Kanban) · oxlint
 - [x] 4. Kanban board with @dnd-kit and optimistic moves, plus a list view with filters and search
 - [x] 5. Task detail drawer with comments and the activity log
 - [x] 6. Notifications dropdown and page, My Tasks page
-- [ ] 7. Dashboard with stats and overdue tasks; org settings for members, roles and invites
+- [x] 7. Dashboard with stats and overdue tasks; org settings for members, roles and invites
 - [ ] 8. Production build served by Nginx, environment config for AWS
