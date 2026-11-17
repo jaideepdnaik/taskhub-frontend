@@ -9,6 +9,8 @@ import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import NotFoundSection from '../pages/NotFoundSection'
 import PlaceholderPage from '../pages/PlaceholderPage'
+import ProjectDetailPage from '../pages/ProjectDetailPage'
+import ProjectsPage from '../pages/ProjectsPage'
 import RegisterPage from '../pages/RegisterPage'
 
 export const router = createBrowserRouter([
@@ -27,7 +29,12 @@ export const router = createBrowserRouter([
             element: <OrgLayout />,
             children: [
               { index: true, element: <DashboardPage /> },
-              { path: 'projects', element: <PlaceholderPage title="Projects" step={3} /> },
+              { path: 'projects', element: <ProjectsPage /> },
+              { path: 'projects/:projectId', element: <ProjectDetailPage /> },
+              {
+                path: 'projects/:projectId/board',
+                element: <PlaceholderPage title="Board" step={4} />,
+              },
               { path: 'my-tasks', element: <PlaceholderPage title="My Tasks" step={6} /> },
               {
                 path: 'notifications',
