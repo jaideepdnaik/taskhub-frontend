@@ -71,3 +71,8 @@ export const fetchMyTasks = ({ search, ...filters } = {}) =>
   api
     .get('/tasks/', { params: { ...filters, assignee: 'me', search: search || undefined } })
     .then((res) => res.data)
+
+// GET /tasks/ -> paginated tasks across every project the user can see.
+// filters: same as fetchProjectTasks (status, overdue, ordering, page_size, ...)
+export const fetchTasks = (filters = {}) =>
+  api.get('/tasks/', { params: filters }).then((res) => res.data)

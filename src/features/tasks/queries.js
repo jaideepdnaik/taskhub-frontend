@@ -17,6 +17,7 @@ import {
   fetchComments,
   fetchMyTasks,
   fetchProjectTasks,
+  fetchTasks,
   fetchTask,
   moveTask,
   updateTask,
@@ -223,5 +224,16 @@ export function useMyTasks(filters) {
     queryKey: [...taskKeys.lists(orgId), 'mine', filters],
     queryFn: () => fetchMyTasks(filters),
     placeholderData: keepPreviousData,
+  })
+}
+
+// The most overdue open tasks across the org (oldest due date first).
+export function useOverdueTasks(limit = 5) {
+  const orgId = useCurrentOrgId()
+  const filters = { overdue: 'true', ordering: 'due_date', page_size: limit }
+  return useQuery({
+    queryKey: [...taskKeys.lists(orgId), 'overdue', filters],
+    queryFn: () => fetchTasks(filters),
+    refetchOnMount: 'always',
   })
 }
