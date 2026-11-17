@@ -7,6 +7,7 @@ import CreateOrgPage from '../pages/CreateOrgPage'
 import DashboardPage from '../pages/DashboardPage'
 import HomeRedirect from '../pages/HomeRedirect'
 import LoginPage from '../pages/LoginPage'
+import MyTasksPage from '../pages/MyTasksPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import NotFoundSection from '../pages/NotFoundSection'
 import NotificationsPage from '../pages/NotificationsPage'
@@ -34,7 +35,7 @@ export const router = createBrowserRouter([
               { path: 'projects', element: <ProjectsPage /> },
               { path: 'projects/:projectId', element: <ProjectDetailPage /> },
               { path: 'projects/:projectId/board', element: <BoardPage /> },
-              { path: 'my-tasks', element: <PlaceholderPage title="My Tasks" step={6} /> },
+              { path: 'my-tasks', element: <MyTasksPage /> },
               { path: 'notifications', element: <NotificationsPage /> },
               { path: 'settings', element: <PlaceholderPage title="Settings" step={7} /> },
               { path: '*', element: <NotFoundSection /> },
