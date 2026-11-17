@@ -34,3 +34,34 @@ export const createTask = (projectId, payload) =>
 // slot in the target column; the server renumbers the other cards.
 export const moveTask = (taskId, { status, position }) =>
   api.patch(`/tasks/${taskId}/move/`, { status, position }).then((res) => res.data)
+
+// GET /tasks/:id/ -> task
+export const fetchTask = (taskId) => api.get(`/tasks/${taskId}/`).then((res) => res.data)
+
+// PATCH /tasks/:id/ {title?, description?, status?, priority?, assignee_id?, due_date?, labels?}
+// -> task. A status change here puts the card at the bottom of its new column.
+export const updateTask = (taskId, payload) =>
+  api.patch(`/tasks/${taskId}/`, payload).then((res) => res.data)
+
+// DELETE /tasks/:id/. Admins, or the task's reporter.
+export const deleteTask = (taskId) => api.delete(`/tasks/${taskId}/`)
+
+// GET /tasks/:id/comments/ -> paginated, oldest first
+export const fetchComments = (taskId, page) =>
+  api.get(`/tasks/${taskId}/comments/`, { params: { page } }).then((res) => res.data)
+
+// POST /tasks/:id/comments/ {body} -> comment
+export const addComment = (taskId, body) =>
+  api.post(`/tasks/${taskId}/comments/`, { body }).then((res) => res.data)
+
+// PATCH /tasks/:id/comments/:commentId/ {body} -> comment. Author only.
+export const editComment = (taskId, commentId, body) =>
+  api.patch(`/tasks/${taskId}/comments/${commentId}/`, { body }).then((res) => res.data)
+
+// DELETE /tasks/:id/comments/:commentId/. Author or org admin.
+export const deleteComment = (taskId, commentId) =>
+  api.delete(`/tasks/${taskId}/comments/${commentId}/`)
+
+// GET /tasks/:id/activity/ -> paginated, newest first
+export const fetchActivity = (taskId, page) =>
+  api.get(`/tasks/${taskId}/activity/`, { params: { page } }).then((res) => res.data)

@@ -1,6 +1,25 @@
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useCurrentOrgId } from '../orgs/queries'
-import { createTask, fetchAllProjectTasks, fetchProjectTasks, moveTask } from './api'
+import {
+  addComment,
+  createTask,
+  deleteComment,
+  deleteTask,
+  editComment,
+  fetchActivity,
+  fetchAllProjectTasks,
+  fetchComments,
+  fetchProjectTasks,
+  fetchTask,
+  moveTask,
+  updateTask,
+} from './api'
 import { applyMove } from './boardLogic'
 
 export const taskKeys = {
@@ -9,6 +28,9 @@ export const taskKeys = {
   lists: (orgId) => [...taskKeys.all(orgId), 'list'],
   list: (orgId, projectId, filters) => [...taskKeys.lists(orgId), projectId, filters],
   detail: (orgId, taskId) => [...taskKeys.all(orgId), 'detail', taskId],
+  // Under the detail key, so invalidating a task also refreshes its history.
+  comments: (orgId, taskId) => [...taskKeys.detail(orgId, taskId), 'comments'],
+  activity: (orgId, taskId) => [...taskKeys.detail(orgId, taskId), 'activity'],
 }
 
 // Every task in the project, as a flat array (see boardLogic.js for grouping).
@@ -79,5 +101,113 @@ export function useMoveTask(projectId) {
       }
       return undefined
     },
+  })
+}
+
+// --- task detail (the drawer) ----------------------------------------------
+
+export function useTask(taskId) {
+  const orgId = useCurrentOrgId()
+  return useQuery({
+    queryKey: taskKeys.detail(orgId, taskId),
+    queryFn: () => fetchTask(taskId),
+    enabled: taskId != null,
+  })
+}
+
+// After any change to a task, the board, the lists and its activity are stale.
+function useInvalidateTask(projectId) {
+  const orgId = useCurrentOrgId()
+  const queryClient = useQueryClient()
+  return (taskId) =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: taskKeys.detail(orgId, taskId) }),
+      queryClient.invalidateQueries({ queryKey: taskKeys.board(orgId, projectId) }),
+      queryClient.invalidateQueries({ queryKey: taskKeys.lists(orgId) }),
+    ])
+}
+
+export function useUpdateTask(taskId, projectId) {
+  const orgId = useCurrentOrgId()
+  const queryClient = useQueryClient()
+  const invalidate = useInvalidateTask(projectId)
+  return useMutation({
+    mutationFn: (changes) => updateTask(taskId, changes),
+    onSuccess: (task) => {
+      queryClient.setQueryData(taskKeys.detail(orgId, taskId), task)
+      return invalidate(taskId)
+    },
+  })
+}
+
+// `onDeleted` runs before the cached task is dropped, so the drawer can close
+// first instead of refetching a task that no longer exists.
+export function useDeleteTask(taskId, projectId, { onDeleted } = {}) {
+  const orgId = useCurrentOrgId()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => deleteTask(taskId),
+    onSuccess: () => {
+      onDeleted?.()
+      queryClient.removeQueries({ queryKey: taskKeys.detail(orgId, taskId) })
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: taskKeys.board(orgId, projectId) }),
+        queryClient.invalidateQueries({ queryKey: taskKeys.lists(orgId) }),
+      ])
+    },
+  })
+}
+
+// --- comments and activity --------------------------------------------------
+
+// Both endpoints are paginated; pages are numbered from 1.
+const nextPage = (lastPage, allPages) => (lastPage.next ? allPages.length + 1 : undefined)
+
+// Oldest first; "load more" fetches newer pages.
+export function useComments(taskId) {
+  const orgId = useCurrentOrgId()
+  return useInfiniteQuery({
+    queryKey: taskKeys.comments(orgId, taskId),
+    queryFn: ({ pageParam }) => fetchComments(taskId, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: nextPage,
+  })
+}
+
+// Newest first; "load more" fetches older pages.
+export function useActivity(taskId) {
+  const orgId = useCurrentOrgId()
+  return useInfiniteQuery({
+    queryKey: taskKeys.activity(orgId, taskId),
+    queryFn: ({ pageParam }) => fetchActivity(taskId, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: nextPage,
+  })
+}
+
+// Posting changes comment_count on cards and adds an activity entry, so the
+// whole task is invalidated (which includes its comments and activity).
+export function useAddComment(taskId, projectId) {
+  const invalidate = useInvalidateTask(projectId)
+  return useMutation({
+    mutationFn: (body) => addComment(taskId, body),
+    onSuccess: () => invalidate(taskId),
+  })
+}
+
+export function useEditComment(taskId) {
+  const orgId = useCurrentOrgId()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ commentId, body }) => editComment(taskId, commentId, body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: taskKeys.comments(orgId, taskId) }),
+  })
+}
+
+export function useDeleteComment(taskId, projectId) {
+  const invalidate = useInvalidateTask(projectId)
+  return useMutation({
+    mutationFn: (commentId) => deleteComment(taskId, commentId),
+    onSuccess: () => invalidate(taskId),
   })
 }
