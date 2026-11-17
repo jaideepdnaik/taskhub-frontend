@@ -5,10 +5,18 @@ const baseURL = import.meta.env.VITE_API_URL ?? '/api'
 
 export const api = axios.create({ baseURL })
 
-// Attach the access token to every request.
+// The current org, mirrored here from Redux (see app/listeners.js) so this
+// module doesn't import the store, which would create an import cycle.
+let currentOrgId = null
+export function setApiOrgId(orgId) {
+  currentOrgId = orgId
+}
+
+// Attach the access token and the current org to every request.
 api.interceptors.request.use((config) => {
   const access = tokenStorage.getAccess()
   if (access) config.headers.Authorization = `Bearer ${access}`
+  if (currentOrgId != null) config.headers['X-Org-ID'] = String(currentOrgId)
   return config
 })
 

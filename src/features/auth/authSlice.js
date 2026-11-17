@@ -31,7 +31,14 @@ const authSlice = createSlice({
     status: 'idle', // idle | loading | failed
     error: null,
   },
-  reducers: {},
+  reducers: {
+    // Tokens were stored by someone else (e.g. registration).
+    sessionStarted(state) {
+      state.isAuthenticated = true
+      state.status = 'idle'
+      state.error = null
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -52,5 +59,6 @@ const authSlice = createSlice({
   },
 })
 
+export const { sessionStarted } = authSlice.actions
 export const selectAuth = (state) => state.auth
 export default authSlice.reducer

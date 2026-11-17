@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { logout } from '../features/auth/authSlice'
+import OrgSwitcher from '../features/orgs/OrgSwitcher'
 
 export default function AppLayout() {
   const dispatch = useDispatch()
@@ -14,7 +15,10 @@ export default function AppLayout() {
   return (
     <div className="layout">
       <header className="topbar">
-        <Link to="/" className="brand">TaskHub</Link>
+        <div className="topbar-left">
+          <Link to="/" className="brand">TaskHub</Link>
+          <OrgSwitcher />
+        </div>
         <button onClick={handleLogout}>Log out</button>
       </header>
       <main className="content">

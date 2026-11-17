@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { login, selectAuth } from '../features/auth/authSlice'
 
 export default function LoginPage() {
@@ -22,31 +22,36 @@ export default function LoginPage() {
 
   return (
     <div className="auth-page">
-      <form className="card" onSubmit={handleSubmit}>
-        <h1>Sign in to TaskHub</h1>
-        <label>
-          Email
-          <input
-            type="email"
-            required
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            required
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
-        </label>
-        {error && <p className="error">{String(error)}</p>}
-        <button type="submit" disabled={status === 'loading'}>
-          {status === 'loading' ? 'Signing in…' : 'Sign in'}
-        </button>
-      </form>
+      <div className="auth-stack">
+        <form className="card" onSubmit={handleSubmit}>
+          <h1>Sign in to TaskHub</h1>
+          <label>
+            Email
+            <input
+              type="email"
+              required
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+          </label>
+          <label>
+            Password
+            <input
+              type="password"
+              required
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+            />
+          </label>
+          {error && <p className="error">{String(error)}</p>}
+          <button type="submit" disabled={status === 'loading'}>
+            {status === 'loading' ? 'Signing in…' : 'Sign in'}
+          </button>
+        </form>
+        <p className="muted">
+          New to TaskHub? <Link to="/register">Create an account</Link>
+        </p>
+      </div>
     </div>
   )
 }
