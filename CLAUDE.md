@@ -39,6 +39,7 @@ React Router v7 · Axios · @dnd-kit (Kanban) · oxlint
 - Define query keys in one place per feature, as factories. For example:
   `taskKeys = { all: ['tasks'], list: (projectId, filters) => [...] }`
 - Org-scoped keys start with `['org', orgId, ...]` (e.g. `projectKeys`, `taskKeys`). User-level keys start with `['auth', ...]` and survive org switches.
+- Notifications are user-level (no `X-Org-ID`); filter them with `?organization=` and include the org id in their keys. The unread count polls every 30s.
 - After a mutation, invalidate the related keys. The Kanban drag-and-drop uses optimistic updates (`onMutate`, then roll back in `onError`, then `onSettled` invalidates).
 
 ## Multi-tenancy
@@ -87,6 +88,6 @@ React Router v7 · Axios · @dnd-kit (Kanban) · oxlint
 - [x] 3. Projects list, create and edit projects, project members
 - [x] 4. Kanban board with @dnd-kit and optimistic moves, plus a list view with filters and search
 - [x] 5. Task detail drawer with comments and the activity log
-- [ ] 6. Notifications dropdown and page, My Tasks page
+- [x] 6. Notifications dropdown and page, My Tasks page
 - [ ] 7. Dashboard with stats and overdue tasks; org settings for members, roles and invites
 - [ ] 8. Production build served by Nginx, environment config for AWS
