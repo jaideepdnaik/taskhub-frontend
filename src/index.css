@@ -537,3 +537,31 @@ textarea {
 .breakdown-track { height: 10px; background: #f0f2f5; border-radius: 0 4px 4px 0; }
 .breakdown-bar { display: block; height: 100%; min-width: 4px; background: #2f5bea; border-radius: 0 4px 4px 0; }
 .breakdown-value { text-align: right; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+
+/* Settings */
+.settings-panel { display: grid; gap: 1rem; }
+.member-row, .invitation-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  flex-wrap: wrap;
+}
+.member-row + .member-row, .invitation-row + .invitation-row { border-top: 1px solid #f0f2f5; }
+.member-row select { width: auto; }
+.invite-form { display: grid; grid-template-columns: 1fr 10rem auto; gap: 0.75rem; align-items: end; }
+.invite-form select { width: 100%; margin-top: 0.25rem; padding: 0.45rem; }
+.invite-sent { display: grid; gap: 0.5rem; background: #e7f6ec; }
+.copy-field { display: flex; gap: 0.5rem; margin-top: 0.25rem; }
+.copy-field input { margin: 0; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+.invite-pending { background: #e6f4ff; color: #0b5cad; }
+.invite-accepted { background: #e7f6ec; color: #1a7f37; }
+.invite-expired { background: #eef0f3; color: #57606a; }
+.danger-zone { border-color: #f1c2c0; }
+.danger-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.danger-row > span { display: grid; gap: 0.15rem; }
+details summary { cursor: pointer; }
+
+@media (max-width: 640px) {
+  .invite-form { grid-template-columns: 1fr; }
+}
