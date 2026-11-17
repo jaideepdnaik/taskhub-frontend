@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { parseApiError } from '../../api/errors'
 import { useDismiss } from '../../hooks/useDismiss'
-import { useCurrentOrgId } from '../orgs/queries'
+import { useCurrentOrg } from '../orgs/queries'
 import NotificationItem from './NotificationItem'
 import { useMarkAllRead, useNotifications, useUnreadCount } from './queries'
 
@@ -10,7 +10,8 @@ const DROPDOWN_SIZE = 8
 
 // Header bell: unread badge for the current org, and its latest notifications.
 export default function NotificationBell() {
-  const orgId = useCurrentOrgId()
+  // Only an org the user still belongs to (not one they just left or deleted).
+  const orgId = useCurrentOrg()?.id ?? null
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const close = useCallback(() => setOpen(false), [])
