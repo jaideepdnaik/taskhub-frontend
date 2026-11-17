@@ -1,23 +1,24 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import { login, selectAuth } from '../features/auth/authSlice'
 
 export default function LoginPage() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const location = useLocation()
   const { isAuthenticated, status, error } = useSelector(selectAuth)
   const [form, setForm] = useState({ email: '', password: '' })
+  // Where ProtectedRoute sent us from, including ?query (e.g. an invite token).
+  const from = location.state?.from
+  const target = from ? `${from.pathname}${from.search ?? ''}` : '/'
 
-  if (isAuthenticated) return <Navigate to="/" replace />
+  // Also handles a successful login: the session flips to authenticated and
+  // this redirect runs on the next render.
+  if (isAuthenticated) return <Navigate to={target} replace />
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    const result = await dispatch(login(form))
-    if (login.fulfilled.match(result)) {
-      navigate(location.state?.from?.pathname ?? '/', { replace: true })
-    }
+    dispatch(login(form))
   }
 
   return (
@@ -49,7 +50,9 @@ export default function LoginPage() {
           </button>
         </form>
         <p className="muted">
-          New to TaskHub? <Link to="/register">Create an account</Link>
+          New to TaskHub? <Link to="/register" state={location.state}>
+            Create an account
+          </Link>
         </p>
       </div>
     </div>

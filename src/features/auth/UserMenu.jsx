@@ -29,7 +29,7 @@ export default function UserMenu() {
             <strong>{me?.full_name || 'Signed in'}</strong>
             <span className="muted">{me?.email}</span>
           </div>
-          <button role="menuitem" className="menu-item" onClick={logout}>
+          <button role="menuitem" className="menu-item" onClick={() => logout()}>
             Log out
           </button>
         </div>
