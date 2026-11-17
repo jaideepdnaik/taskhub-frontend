@@ -9,6 +9,7 @@ import HomeRedirect from '../pages/HomeRedirect'
 import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import NotFoundSection from '../pages/NotFoundSection'
+import NotificationsPage from '../pages/NotificationsPage'
 import PlaceholderPage from '../pages/PlaceholderPage'
 import ProjectDetailPage from '../pages/ProjectDetailPage'
 import ProjectsPage from '../pages/ProjectsPage'
@@ -34,10 +35,7 @@ export const router = createBrowserRouter([
               { path: 'projects/:projectId', element: <ProjectDetailPage /> },
               { path: 'projects/:projectId/board', element: <BoardPage /> },
               { path: 'my-tasks', element: <PlaceholderPage title="My Tasks" step={6} /> },
-              {
-                path: 'notifications',
-                element: <PlaceholderPage title="Notifications" step={6} />,
-              },
+              { path: 'notifications', element: <NotificationsPage /> },
               { path: 'settings', element: <PlaceholderPage title="Settings" step={7} /> },
               { path: '*', element: <NotFoundSection /> },
             ],
