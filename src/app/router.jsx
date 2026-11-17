@@ -7,6 +7,8 @@ import DashboardPage from '../pages/DashboardPage'
 import HomeRedirect from '../pages/HomeRedirect'
 import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
+import NotFoundSection from '../pages/NotFoundSection'
+import PlaceholderPage from '../pages/PlaceholderPage'
 import RegisterPage from '../pages/RegisterPage'
 
 export const router = createBrowserRouter([
@@ -25,7 +27,14 @@ export const router = createBrowserRouter([
             element: <OrgLayout />,
             children: [
               { index: true, element: <DashboardPage /> },
-              // Coming next: projects, projects/:projectId/board, my-tasks, ...
+              { path: 'projects', element: <PlaceholderPage title="Projects" step={3} /> },
+              { path: 'my-tasks', element: <PlaceholderPage title="My Tasks" step={6} /> },
+              {
+                path: 'notifications',
+                element: <PlaceholderPage title="Notifications" step={6} />,
+              },
+              { path: 'settings', element: <PlaceholderPage title="Settings" step={7} /> },
+              { path: '*', element: <NotFoundSection /> },
             ],
           },
         ],
