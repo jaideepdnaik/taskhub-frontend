@@ -14,5 +14,8 @@ export const PRIORITIES = [
   { value: 'urgent', label: 'Urgent' },
 ]
 
+// Everything except done, for 'open tasks' filters.
+export const OPEN_STATUSES = STATUSES.filter((s) => s.value !== 'done').map((s) => s.value)
+
 export const statusLabel = (value) => STATUSES.find((s) => s.value === value)?.label ?? value
 export const priorityLabel = (value) => PRIORITIES.find((p) => p.value === value)?.label ?? value

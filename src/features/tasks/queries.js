@@ -15,6 +15,7 @@ import {
   fetchActivity,
   fetchAllProjectTasks,
   fetchComments,
+  fetchMyTasks,
   fetchProjectTasks,
   fetchTask,
   moveTask,
@@ -209,5 +210,18 @@ export function useDeleteComment(taskId, projectId) {
   return useMutation({
     mutationFn: (commentId) => deleteComment(taskId, commentId),
     onSuccess: () => invalidate(taskId),
+  })
+}
+
+// --- my tasks ----------------------------------------------------------------
+
+// Tasks assigned to me across the org's projects. Keyed under `lists`, so
+// anything that invalidates task lists refreshes it too.
+export function useMyTasks(filters) {
+  const orgId = useCurrentOrgId()
+  return useQuery({
+    queryKey: [...taskKeys.lists(orgId), 'mine', filters],
+    queryFn: () => fetchMyTasks(filters),
+    placeholderData: keepPreviousData,
   })
 }

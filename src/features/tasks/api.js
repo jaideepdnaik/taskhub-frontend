@@ -65,3 +65,9 @@ export const deleteComment = (taskId, commentId) =>
 // GET /tasks/:id/activity/ -> paginated, newest first
 export const fetchActivity = (taskId, page) =>
   api.get(`/tasks/${taskId}/activity/`, { params: { page } }).then((res) => res.data)
+
+// GET /tasks/?assignee=me&... -> paginated tasks across every visible project
+export const fetchMyTasks = ({ search, ...filters } = {}) =>
+  api
+    .get('/tasks/', { params: { ...filters, assignee: 'me', search: search || undefined } })
+    .then((res) => res.data)
