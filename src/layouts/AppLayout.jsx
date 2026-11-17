@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import UserMenu from '../features/auth/UserMenu'
+import NotificationBell from '../features/notifications/NotificationBell'
 import OrgSwitcher from '../features/orgs/OrgSwitcher'
 import { selectSidebarOpen, sidebarClosed, sidebarToggled } from '../features/ui/uiSlice'
 import Sidebar from './Sidebar'
@@ -31,7 +32,10 @@ export default function AppLayout() {
           <Link to="/" className="brand">TaskHub</Link>
           <OrgSwitcher />
         </div>
-        <UserMenu />
+        <div className="topbar-right">
+          <NotificationBell />
+          <UserMenu />
+        </div>
       </header>
       <div className="shell">
         <Sidebar open={sidebarOpen} />
