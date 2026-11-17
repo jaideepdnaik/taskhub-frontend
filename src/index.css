@@ -356,3 +356,17 @@ textarea {
 .add-task:hover { background: #e3e6ea; }
 .quick-add { display: grid; gap: 0.5rem; }
 .quick-add input { margin: 0; }
+
+/* Task list */
+.checkbox { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.checkbox input { width: auto; margin: 0; }
+.table-wrap { overflow-x: auto; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; }
+.task-table { width: 100%; border-collapse: collapse; }
+.task-table th, .task-table td { padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
+.task-table th { font-size: 0.8rem; color: #57606a; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+.task-table tr + tr td { border-top: 1px solid #f0f2f5; }
+.assignee { display: inline-flex; align-items: center; gap: 0.4rem; }
+.status { padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.8rem; white-space: nowrap; background: #eef0f3; }
+.status-in_progress { background: #e6f4ff; color: #0b5cad; }
+.status-review { background: #f3e8ff; color: #6b21a8; }
+.status-done { background: #e7f6ec; color: #1a7f37; }
