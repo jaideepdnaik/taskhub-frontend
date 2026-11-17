@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from '../components/ProtectedRoute'
 import AppLayout from '../layouts/AppLayout'
+import AcceptInvitePage from '../pages/AcceptInvitePage'
 import BoardPage from '../pages/BoardPage'
 import OrgLayout from '../layouts/OrgLayout'
 import CreateOrgPage from '../pages/CreateOrgPage'
@@ -22,6 +23,9 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
+      // Invite links need an account; signed-out users log in or register first.
+      { path: '/invitations/accept', element: <AcceptInvitePage /> },
+      { path: '/invite/:token', element: <AcceptInvitePage /> },
       {
         element: <AppLayout />,
         children: [
