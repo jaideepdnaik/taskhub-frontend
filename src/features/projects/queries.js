@@ -74,7 +74,9 @@ export function useDeleteProject(projectId, { onDeleted } = {}) {
   })
 }
 
-// Adding/removing members changes the detail's member list and the lists' member_count.
+// Adding/removing members changes the detail's member list and the lists'
+// member_count. Removing one also unassigns them from the project's tasks
+// (a backend signal), so cached tasks are stale too.
 function useMemberMutation(projectId, mutationFn) {
   const orgId = useCurrentOrgId()
   const queryClient = useQueryClient()
@@ -84,6 +86,8 @@ function useMemberMutation(projectId, mutationFn) {
       Promise.all([
         queryClient.invalidateQueries({ queryKey: projectKeys.detail(orgId, projectId) }),
         queryClient.invalidateQueries({ queryKey: projectKeys.lists(orgId) }),
+        // Same as taskKeys.all(orgId); spelled out to avoid importing the tasks feature.
+        queryClient.invalidateQueries({ queryKey: ['org', orgId, 'tasks'] }),
       ]),
   })
 }
