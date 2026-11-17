@@ -1,7 +1,9 @@
 import { api } from '../../api/client'
 
-// Safety cap for fetchAllProjectTasks: 50 pages x 20 = 1000 tasks.
-const MAX_PAGES = 50
+// The backend's StandardPagination allows ?page_size= up to 100.
+const BOARD_PAGE_SIZE = 100
+// Safety cap for fetchAllProjectTasks: 20 pages x 100 = 2000 tasks.
+const MAX_PAGES = 20
 
 // GET /projects/:id/tasks/ with filters -> {count, next, previous, results}.
 // filters: {page, search, status[], priority[], assignee, label, overdue, ordering}
@@ -12,13 +14,12 @@ export const fetchProjectTasks = (projectId, { search, ...filters } = {}) =>
     })
     .then((res) => res.data)
 
-// Every task in a project, for the board. The endpoint is paginated (20 per
-// page, no page_size override), so walk the pages until `next` is null.
-// Results arrive ordered by status, then position.
+// Every task in a project, for the board: one request for up to 100 tasks,
+// then further pages until `next` is null. Ordered by status, then position.
 export async function fetchAllProjectTasks(projectId) {
   const tasks = []
   for (let page = 1; page <= MAX_PAGES; page += 1) {
-    const data = await fetchProjectTasks(projectId, { page })
+    const data = await fetchProjectTasks(projectId, { page, page_size: BOARD_PAGE_SIZE })
     tasks.push(...data.results)
     if (!data.next) break
   }
