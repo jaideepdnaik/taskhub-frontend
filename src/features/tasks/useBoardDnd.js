@@ -35,7 +35,11 @@ export function useBoardDnd(tasks, onMove) {
   const sensors = useSensors(
     // A small distance so a click on a card isn't treated as a drag.
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+    // Space picks up and drops; Enter is left free to open the task.
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+      keyboardCodes: { start: ['Space'], cancel: ['Escape'], end: ['Space'] },
+    }),
   )
 
   const ids = drag && (activeId != null || drag.base === tasks) ? drag.ids : baseIds

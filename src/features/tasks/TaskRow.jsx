@@ -2,12 +2,16 @@ import Avatar from '../../components/Avatar'
 import { statusLabel } from './constants'
 import DueDate from './DueDate'
 import PriorityBadge from './PriorityBadge'
+import { useTaskDrawer } from './useTaskDrawer'
 
 export default function TaskRow({ task }) {
+  const { openTask } = useTaskDrawer()
   return (
     <tr>
       <td>
-        <span className="task-title">{task.title}</span>
+        <button className="link-button task-title" onClick={() => openTask(task.id)}>
+          {task.title}
+        </button>
         {task.labels.length > 0 && (
           <div className="labels">
             {task.labels.map((label) => (

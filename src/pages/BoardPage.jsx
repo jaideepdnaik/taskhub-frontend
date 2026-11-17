@@ -4,6 +4,7 @@ import { useCurrentOrgId } from '../features/orgs/queries'
 import { usePermissions } from '../features/orgs/usePermissions'
 import { useProject } from '../features/projects/queries'
 import Board from '../features/tasks/Board'
+import TaskDrawer from '../features/tasks/TaskDrawer'
 import TaskListView from '../features/tasks/TaskListView'
 
 export default function BoardPage() {
@@ -59,6 +60,7 @@ export default function BoardPage() {
       ) : (
         <TaskListView project={project} />
       )}
+      <TaskDrawer project={project} editable={editable} />
     </section>
   )
 }
