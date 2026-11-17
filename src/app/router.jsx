@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from '../components/ProtectedRoute'
 import AppLayout from '../layouts/AppLayout'
+import BoardPage from '../pages/BoardPage'
 import OrgLayout from '../layouts/OrgLayout'
 import CreateOrgPage from '../pages/CreateOrgPage'
 import DashboardPage from '../pages/DashboardPage'
@@ -31,10 +32,7 @@ export const router = createBrowserRouter([
               { index: true, element: <DashboardPage /> },
               { path: 'projects', element: <ProjectsPage /> },
               { path: 'projects/:projectId', element: <ProjectDetailPage /> },
-              {
-                path: 'projects/:projectId/board',
-                element: <PlaceholderPage title="Board" step={4} />,
-              },
+              { path: 'projects/:projectId/board', element: <BoardPage /> },
               { path: 'my-tasks', element: <PlaceholderPage title="My Tasks" step={6} /> },
               {
                 path: 'notifications',
