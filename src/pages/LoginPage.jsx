@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, Navigate, useLocation } from 'react-router-dom'
+import Icon from '../components/Icon'
 import { login, selectAuth } from '../features/auth/authSlice'
 
 export default function LoginPage() {
@@ -25,7 +26,14 @@ export default function LoginPage() {
     <div className="auth-page">
       <div className="auth-stack">
         <form className="card" onSubmit={handleSubmit}>
-          <h1>Sign in to TaskHub</h1>
+          <div className="auth-brand">
+            <span className="brand-mark" aria-hidden="true">
+              <Icon name="check" size={16} />
+            </span>
+            <span>TaskHub</span>
+          </div>
+          <h1>Welcome back</h1>
+          <p className="muted">Sign in to plan, track and ship work with your team.</p>
           <label>
             Email
             <input

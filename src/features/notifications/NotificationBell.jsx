@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Icon from '../../components/Icon'
 import { parseApiError } from '../../api/errors'
 import { useDismiss } from '../../hooks/useDismiss'
 import { useCurrentOrg } from '../orgs/queries'
@@ -35,7 +36,7 @@ export default function NotificationBell() {
         aria-label={unread ? `Notifications, ${unread} unread` : 'Notifications'}
         onClick={() => setOpen((v) => !v)}
       >
-        🔔
+        <Icon name="bell" size={20} />
         {unread > 0 && <span className="bell-badge">{unread > 99 ? '99+' : unread}</span>}
       </button>
       {open && (

@@ -9,9 +9,12 @@ export default function BoardColumn({ status, label, tasks, editable, projectId 
   const { setNodeRef, isOver } = useDroppable({ id: columnDroppableId(status) })
 
   return (
-    <section className={`board-column${isOver ? ' over' : ''}`} aria-label={label}>
+    <section className={`board-column column-${status}${isOver ? ' over' : ''}`} aria-label={label}>
       <header className="board-column-header">
-        <h2>{label}</h2>
+        <h2>
+          <span className="column-dot" aria-hidden="true" />
+          {label}
+        </h2>
         <span className="count">{tasks.length}</span>
       </header>
       <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>

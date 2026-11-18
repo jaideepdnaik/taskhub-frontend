@@ -1,4 +1,5 @@
 import Avatar from '../../components/Avatar'
+import Icon from '../../components/Icon'
 import DueDate from './DueDate'
 import PriorityBadge from './PriorityBadge'
 
@@ -20,8 +21,8 @@ export default function TaskCard({ task, overlay = false }) {
         <PriorityBadge priority={task.priority} />
         <DueDate task={task} />
         {task.comment_count > 0 && (
-          <span className="muted small" title="Comments">
-            💬 {task.comment_count}
+          <span className="comment-count" title="Comments">
+            <Icon name="comment" size={14} /> {task.comment_count}
           </span>
         )}
         {task.assignee && (

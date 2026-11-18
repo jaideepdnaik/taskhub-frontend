@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Icon from './Icon'
 
 // A headline number. `alert` adds an icon and accent for counts that need
 // attention (e.g. overdue > 0), so the state isn't carried by color alone.
@@ -9,7 +10,7 @@ export default function StatTile({ label, value, hint, to, alert = false }) {
       <span className="stat-value">
         {alert && (
           <span className="stat-alert" aria-hidden="true">
-            ⚠
+            <Icon name="alert" size={20} />
           </span>
         )}
         {value}

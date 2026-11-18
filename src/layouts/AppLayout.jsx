@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
 import UserMenu from '../features/auth/UserMenu'
 import NotificationBell from '../features/notifications/NotificationBell'
 import OrgSwitcher from '../features/orgs/OrgSwitcher'
+import Icon from '../components/Icon'
 import { selectSidebarOpen, sidebarClosed, sidebarToggled } from '../features/ui/uiSlice'
 import Sidebar from './Sidebar'
 
@@ -27,9 +28,14 @@ export default function AppLayout() {
             aria-expanded={sidebarOpen}
             onClick={() => dispatch(sidebarToggled())}
           >
-            ☰
+            <Icon name="menu" size={20} />
           </button>
-          <Link to="/" className="brand">TaskHub</Link>
+          <Link to="/" className="brand">
+            <span className="brand-mark" aria-hidden="true">
+              <Icon name="check" size={16} />
+            </span>
+            TaskHub
+          </Link>
           <OrgSwitcher />
         </div>
         <div className="topbar-right">
