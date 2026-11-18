@@ -44,6 +44,9 @@ export default function ProjectDetailPage() {
           <Link className="button" to={`/org/${orgId}/projects/${project.id}/board`}>
             Open board
           </Link>
+          <Link className="button secondary" to={`/org/${orgId}/assistant?project=${project.id}`}>
+            Ask about this project
+          </Link>
           {isAdmin && <ProjectActions project={project} />}
         </div>
       </div>
