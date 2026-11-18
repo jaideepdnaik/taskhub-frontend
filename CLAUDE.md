@@ -56,6 +56,9 @@ React Router v7 · Axios · @dnd-kit (Kanban) · oxlint
 - `/org/:orgId/projects/:projectId`: project page (details, members, archive/delete)
 - `/org/:orgId/projects/:projectId/board`: the Kanban board; `?view=list` shows the filtered list. Task details open in a drawer (`?task=<id>`).
 - `/org/:orgId/my-tasks` and `/org/:orgId/notifications`
+- `/org/:orgId/assistant/:conversationId?` (`?project=<id>` scopes a new chat): Ask TaskHub, the user's private Q&A threads.
+  Questions can take 5–30s (130s timeout). The pending question is rendered from the mutation's variables, so errors need no rollback.
+  Answers are Markdown (react-markdown, never `rehype-raw`) with `[n]` markers rendered as citation chips.
 - `/org/:orgId/settings?tab=members|invitations|general`: members and roles, invitations (owner/admin), rename/leave/delete
 - Protected routes go through `ProtectedRoute`. Hide or disable actions the user's role can't perform, such as edit buttons for viewers.
   Use `usePermissions()` (`isAdmin`, `canEdit`, `isOwner`), which mirrors the backend's role matrix. Archived projects are read-only.
