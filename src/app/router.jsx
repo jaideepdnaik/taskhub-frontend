@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from '../components/ProtectedRoute'
 import AppLayout from '../layouts/AppLayout'
+import AssistantPage from '../pages/AssistantPage'
 import AcceptInvitePage from '../pages/AcceptInvitePage'
 import BoardPage from '../pages/BoardPage'
 import OrgLayout from '../layouts/OrgLayout'
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
               { path: 'projects/:projectId/board', element: <BoardPage /> },
               { path: 'my-tasks', element: <MyTasksPage /> },
               { path: 'notifications', element: <NotificationsPage /> },
+              { path: 'assistant/:conversationId?', element: <AssistantPage /> },
               { path: 'settings', element: <SettingsPage /> },
               { path: '*', element: <NotFoundSection /> },
             ],

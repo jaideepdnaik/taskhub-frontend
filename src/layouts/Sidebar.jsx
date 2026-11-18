@@ -5,6 +5,7 @@ const LINKS = [
   { to: '', label: 'Dashboard', end: true },
   { to: 'projects', label: 'Projects' },
   { to: 'my-tasks', label: 'My Tasks' },
+  { to: 'assistant', label: 'Ask TaskHub' },
   { to: 'notifications', label: 'Notifications' },
   { to: 'settings', label: 'Settings' },
 ]
